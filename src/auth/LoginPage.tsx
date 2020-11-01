@@ -2,32 +2,27 @@
 import React from "react";
 import {
     Button,
-    Checkbox,
     colors,
     Container,
     createMuiTheme,
-    CssBaseline,
-    FormControlLabel,
     Grid,
     Link,
     makeStyles,
     TextField,
     Typography
 } from "@material-ui/core";
-import { Auth } from "aws-amplify";
-import catAvatar from "../assets/img/cat-head.png"
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import logo from "../assets/img/logo.png"
+import background from "../assets/img/login-bg.jpg"
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import { AuthContext } from "../utils/AuthContext";
 
-
-type AuthError = {
+export type AuthError = {
     code: string,
     name: string,
     message: string
 } | null
 
-
-type Props = {
-    updateUser: (user: any) => void
-}
 
 const theme = createMuiTheme({
     palette: {
@@ -52,68 +47,77 @@ const useStyles = makeStyles(() => ({
         flexDirection: "column",
         alignItems: "center"
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+    cat: {
+        position: "absolute",
+        top: theme.spacing(15),
+        width: "104px"
+    },
+    title: {
+        color: "#000",
+        fontWeight: "bold",
+        fontSize: "4rem",
+        padding: theme.spacing(0, 4, 4, 4)
     },
     form: {
-        padding: theme.spacing(10, 3, 3, 3),
+        padding: theme.spacing(5, 3, 3, 3),
         backgroundColor: "#FFFFFF",
         width: "100%", // Fix IE 11 issue.
         marginTop: theme.spacing(20)
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        backgroundColor: theme.palette.primary.main
+        backgroundColor: theme.palette.primary.main,
+        textTransform: "uppercase",
+        lineHeight: "50px",
+        borderRadius: "12px"
     },
-    cat: {
+    passwordContainer: {
+        position: "relative"
+    },
+    toggle: {
         position: "absolute",
-        top: theme.spacing(0)
+        right: "12px",
+        top: "24px"
+    },
+    login: {
+        backgroundImage: `url(${background})`,
+        height: "100%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover"
     }
 }));
 
-export const CustomSignIn = (props: Props) => {
+export const LoginPage = () => {
     // COACH
-    // const [email, setEmail] = React.useState("ivan+no@tdf.dev")
-    // const [password, setPassword] = React.useState("DufjrsuU")
+    const [email, setEmail] = React.useState("ivan+no@tdf.dev")
+    const [password, setPassword] = React.useState("DufjrsuU")
 
     // FREELANCER
-    const [email, setEmail] = React.useState("ivan+ad@tdf.dev")
-    const [password, setPassword] = React.useState("XNdOz1ah")
+    // const [email, setEmail] = React.useState("ivan+ad@tdf.dev")
+    // const [password, setPassword] = React.useState("XNdOz1ah")
+
 
     const [error, setError] = React.useState<AuthError>(null)
+    const [passwordVisible, setPasswordVisible] = React.useState(false)
 
+    const authContext = React.useContext(AuthContext)
     const classes = useStyles();
 
-    const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    const login = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setError(null)
-
-        try {
-            const res = await Auth.signIn(email, password);
-            const user = await Auth.currentUserInfo()
-
-            console.log(res)
-            localStorage.setItem("jwt", res.signInUserSession.idToken.jwtToken)
-            props.updateUser(user)
-
-        } catch (err) {
-            setError(err)
-        }
+        authContext.login(email, password, setError)
     }
 
-
-
     return (
-        <div className="login">
+        <div className={classes.login}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
                 <div className={classes.paper}>
-                    <img src={catAvatar} alt="cat-logo" className={classes.cat} />
-                    <form className={classes.form} onSubmit={signIn}>
-                        <Typography component="h1" variant="h5" align="center">
+                    <img src={logo} alt="cat-logo" className={classes.cat} />
+                    <form className={classes.form} onSubmit={login}>
+                        <Typography className={classes.title} component="h1" variant="h5" align="center">
                             Welcome
-                        </Typography>
+                             </Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -130,25 +134,26 @@ export const CustomSignIn = (props: Props) => {
                                     onChange={(e) => setEmail(e.currentTarget.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} className={classes.passwordContainer}>
                                 <TextField
                                     variant="outlined"
                                     required
                                     fullWidth
                                     name="password"
                                     label="Password"
-                                    type="password"
+                                    type={passwordVisible ? "text" : "password"}
                                     defaultValue={password}
                                     error={error?.code === "NotAuthorizedException"}
                                     helperText={error?.message}
                                     onChange={(e) => setPassword(e.currentTarget.value)}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="rememberMe" color="primary" />}
-                                    label="Remember me"
-                                />
+                                <Link
+                                    className={classes.toggle}
+                                    onClick={() => setPasswordVisible(!passwordVisible)}>
+                                    {passwordVisible ?
+                                        <VisibilityIcon htmlColor="#000" /> :
+                                        <VisibilityOffIcon htmlColor="#000" />}
+                                </Link>
                             </Grid>
                         </Grid>
                         <Button
@@ -158,15 +163,8 @@ export const CustomSignIn = (props: Props) => {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign Up
-                       </Button>
-                        <Grid container justify="center">
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    Don't have an account? Contact us
-                               </Link>
-                            </Grid>
-                        </Grid>
+                            Log In
+                          </Button>
                     </form>
                 </div>
             </Container>

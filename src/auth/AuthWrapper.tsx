@@ -1,47 +1,47 @@
 import React from "react"
-import { IAuthenticatorProps } from "aws-amplify-react/lib-esm/Auth/Authenticator";
-import { CustomSignIn } from "./SignIn";
+import { AuthError, LoginPage } from "./LoginPage";
+import { Coach } from "../components/coach/CoachPage";
+import { Freelancer } from "../components/freelancer/FreelancerPage";
+import { Route, Switch } from 'react-router-dom'
+import { AuthContext } from "../utils/AuthContext";
 import { Auth } from "aws-amplify";
-import { Coach } from "../main/coach/Coach";
-import { Freelancer } from "../main/freelancer/Freelancer";
+import { useHistory } from "react-router-dom";
+import { FreelancerView } from "../components/coach/ViewFreelancerPage";
 
-export const AuthWrapper = (props: IAuthenticatorProps) => {
+export const AuthWrapper = () => {
+    const history = useHistory()
 
-    const [user, updateUser] = React.useState<any>({})
+    const logout = async () => {
+        await Auth.signOut({ global: true });
+        localStorage.clear()
+        history.push("/")
+    }
 
-
-    React.useEffect(() => {
-        checkUser()
-    }, [])
-
-    const checkUser = async () => {
+    const login = async (
+        email: string,
+        password: string,
+        setError: React.Dispatch<React.SetStateAction<AuthError>>) => {
         try {
-            const user = await Auth.currentAuthenticatedUser()
-            console.log(user)
-            updateUser(user)
+            setError(null)
+            const auth = await Auth.signIn(email, password);
+            localStorage.setItem("authState", JSON.stringify(auth))
+            history.push((auth.attributes["custom:roles"].toLowerCase()))
         } catch (err) {
-            //
+            setError(err)
         }
     }
 
-
-    if (!user) {
-        return <CustomSignIn updateUser={updateUser} />
-    } else if (user && user.attributes) {
-        switch (user!!.attributes["custom:roles"]) {
-            case "FREELANCER": {
-                return <Freelancer />
-            }
-            case "COACH": {
-                return <Coach updateUser={updateUser} />
-            }
-            default: {
-                // should never happen
-                return null
-            }
-        }
-    } else {
-        // should never happen
-        return null
-    }
+    return (
+        <AuthContext.Provider value={{
+            login,
+            logout
+        }}>
+            <Switch>
+                <Route exact path={["/", "/login"]} component={LoginPage} />
+                <Route exact path="/coach" component={() => <Coach />} />
+                <Route exact path="/freelancer" component={Freelancer} />
+                <Route exact path="/freelancer/:id" component={FreelancerView} />
+            </Switch>
+        </AuthContext.Provider >
+    )
 }

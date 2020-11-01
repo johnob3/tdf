@@ -4,15 +4,17 @@ import { Authenticator } from "aws-amplify-react"
 import { AuthWrapper } from "./auth/AuthWrapper"
 import CssBaseline from '@material-ui/core/CssBaseline';
 import './App.scss';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <React.Fragment>
+    <BrowserRouter>
       <CssBaseline />
       <Authenticator hideDefault={true} amplifyConfig={awsconfig} container={null}>
         <AuthWrapper />
       </Authenticator>
-    </React.Fragment>
+    </BrowserRouter>
   );
 }
+
 export default App;

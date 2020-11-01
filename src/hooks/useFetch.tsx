@@ -7,7 +7,12 @@ export function useFetch(endpoint: string) {
     const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(() => {
-        const idToken = localStorage.getItem("jwt")
+        const auth = JSON.parse(localStorage.getItem("authState")!)
+        if (!auth) {
+            setError('no auth found')
+            return
+        }
+        const idToken = auth.signInUserSession.idToken.jwtToken
         const fetchData = async () => {
             setIsLoading(true);
             try {
