@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
 import { UserInfo } from '../freelancer/FreelancerInfo';
-
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         box: {
@@ -17,14 +17,22 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(4)
         },
         boldText: {
-            fontWeight: "bolder"
+            fontWeight: "bolder",
         },
-        regularText: {
-
+        cellTextBold: {
+            fontWeight: "bold",
+            lineHeight: "60px"
+        },
+        cellText: {
+            lineHeight: "60px",
         },
         divider: {
-            borderBottom: "solid 1px"
+            borderBottom: "solid 1px #ddd"
         },
+        status: {
+            display: "flex",
+            alignItems: "center",
+        }
     }),
 );
 
@@ -36,10 +44,10 @@ export const FreelancerGrid = (props: Props) => {
     const classes = useStyles()
 
     const BoldText = ({ text }: { text: string }) => {
-        return <Typography className={classes.boldText} variant="caption">{text}</Typography>
+        return <Typography className={classes.cellTextBold} variant="caption">{text}</Typography>
     }
     const RegularText = ({ text }: { text: string }) => {
-        return <Typography className={classes.regularText} variant="caption">{text}</Typography>
+        return <Typography className={classes.cellText} variant="caption">{text}</Typography>
     }
 
     return (<Box className={classes.box}>
@@ -88,7 +96,8 @@ export const FreelancerGrid = (props: Props) => {
             <Grid item xs={6}>
                 <BoldText text="Status:" />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} className={classes.status}>
+                <CheckCircleIcon htmlColor="green" />
                 <RegularText text={props.info.status} />
             </Grid>
         </Grid>

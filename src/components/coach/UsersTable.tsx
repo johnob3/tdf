@@ -19,7 +19,10 @@ const useStyles = makeStyles({
             background: "#ddd",
             cursor: "pointer"
         },
-    }
+    },
+    headCell: {
+        fontWeight: "bold"
+    },
 });
 
 type Props = {
@@ -78,10 +81,10 @@ export const UsersTable = (props: Props) => {
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Full name</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell>Phone</TableCell>
+                            <TableCell className={classes.headCell}>Email</TableCell>
+                            <TableCell className={classes.headCell}>Full name</TableCell>
+                            <TableCell className={classes.headCell}>Role</TableCell>
+                            <TableCell className={classes.headCell}>Phone</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -97,6 +100,7 @@ export const UsersTable = (props: Props) => {
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+            // should add custom table pagination component
             />
         </>
     );

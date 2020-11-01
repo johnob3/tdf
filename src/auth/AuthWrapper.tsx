@@ -1,12 +1,12 @@
 import React from "react"
 import { AuthError, LoginPage } from "./LoginPage";
-import { Coach } from "../components/coach/CoachPage";
-import { Freelancer } from "../components/freelancer/FreelancerPage";
+import { CoachPage } from "../components/coach/CoachPage";
+import { FreelancerPage } from "../components/freelancer/FreelancerPage";
+import { FreelancerViewPage } from "../components/coach/FreelancerViewPage";
 import { Route, Switch } from 'react-router-dom'
 import { AuthContext } from "../utils/AuthContext";
 import { Auth } from "aws-amplify";
 import { useHistory } from "react-router-dom";
-import { FreelancerView } from "../components/coach/ViewFreelancerPage";
 
 export const AuthWrapper = () => {
     const history = useHistory()
@@ -37,10 +37,11 @@ export const AuthWrapper = () => {
             logout
         }}>
             <Switch>
+                {/* should protect routes for different roles */}
                 <Route exact path={["/", "/login"]} component={LoginPage} />
-                <Route exact path="/coach" component={() => <Coach />} />
-                <Route exact path="/freelancer" component={Freelancer} />
-                <Route exact path="/freelancer/:id" component={FreelancerView} />
+                <Route exact path="/coach" component={CoachPage} />
+                <Route exact path="/freelancer" component={FreelancerPage} />
+                <Route exact path="/freelancer/:id" component={FreelancerViewPage} />
             </Switch>
         </AuthContext.Provider >
     )

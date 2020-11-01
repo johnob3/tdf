@@ -2,54 +2,56 @@ import React from "react"
 import { useFetch } from "../../hooks/useFetch"
 import { UsersTable } from "./UsersTable"
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Button, Grid, Icon, IconButton, ListItem, ListItemIcon } from "@material-ui/core"
+import { Button, Grid } from "@material-ui/core"
 import Typography from '@material-ui/core/Typography';
-import { BrowserRouterProps, Link } from "react-router-dom";
 import { Layout } from "../../elements/Layout"
-import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import AddIcon from '@material-ui/icons/Add';
+import { CoachSidebar } from "./CoachSidebar";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         title: {
             fontWeight: "bold",
-            padding: theme.spacing(3),
+            padding: theme.spacing(5, 3, 3, 3),
+        },
+        buttonContainer: {
+            marginTop: theme.spacing(4),
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center"
         },
         button: {
-            marginTop: theme.spacing(4)
+            backgroundColor: "#0A7BC4",
+            borderRadius: 8,
+            color: "#fff"
         },
         listTitle: {
             textTransform: "uppercase",
             color: "#5f5e5e",
             padding: theme.spacing(3),
-            fontSize: "15px",
+            fontSize: "12px",
             fontWeight: 400,
             letterSpacing: 1
+        },
+        listLink: {
+            color: "rgba(0, 0, 0, NaN)",
+            textDecoration: "none",
+            '&:visited': {
+                color: "#000"
+            },
+        },
+        addIcon: {
+            background: "#e84c4c57",
+            borderRadius: "50%",
+            marginLeft: "85px",
+            width: "32px",
+            height: "32px"
         }
     }),
 );
-export const Coach = (props: BrowserRouterProps) => {
-    const { data, error } = useFetch("/users")
-
+export const CoachPage = () => {
+    const { data } = useFetch("/users")
     const classes = useStyles()
-
-    const SidebarJSX = () => {
-        return (
-            <>
-                <Typography variant="h6" className={classes.listTitle}>
-                    User management
-                </Typography>
-                <ListItem button key={"Users"}>
-                    <ListItemIcon><PersonIcon /></ListItemIcon>
-                    <Link to="/coach">Users</Link>
-                    <IconButton color="secondary" aria-label="add an alarm">
-                        <AddIcon />
-                    </IconButton>
-                </ListItem>
-            </>
-        )
-    }
 
     const MainJSX = () => {
         return (
@@ -60,10 +62,10 @@ export const Coach = (props: BrowserRouterProps) => {
                             Users
                     </Typography>
                     </Grid>
-                    <Grid item xs={2} className={classes.button}>
-                        <Button variant="contained" color="primary">
-                            <Icon><PersonAddIcon /></Icon>
-                        Create User
+                    <Grid item xs={2} className={classes.buttonContainer}>
+                        <Button variant="contained" className={classes.button}
+                            startIcon={<PersonAddIcon />}>
+                            Create User
                     </Button>
                     </Grid>
                 </Grid>
@@ -74,10 +76,8 @@ export const Coach = (props: BrowserRouterProps) => {
     }
 
     if (Object.keys(data).length === 0) {
-        return null
+        return <Layout sidebarJSX={<CoachSidebar />} mainJSX={<></>} />
     } else {
-        return (
-            <Layout sidebarJSX={<SidebarJSX />} mainJSX={<MainJSX />} />
-        );
+        return <Layout sidebarJSX={<CoachSidebar />} mainJSX={<MainJSX />} />
     }
 }

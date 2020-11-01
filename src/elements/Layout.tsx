@@ -10,6 +10,7 @@ import { AuthContext } from '../utils/AuthContext';
 import logo from "../assets/img/logo.png"
 import PersonIcon from '@material-ui/icons/Person';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+
 type Props = {
     sidebarJSX: JSX.Element
     mainJSX: JSX.Element
@@ -54,8 +55,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         logoTitle: {
             color: "#fff",
-            fontWeight: "bold"
+            fontWeight: "bold",
+            paddingRight: "40px",
         },
+        alignRight: {
+            display: "flex",
+            justifyContent: "flex-end"
+        },
+
     }),
 );
 
@@ -81,7 +88,7 @@ export const Layout = (props: Props) => {
                 <Toolbar className={classes.menu}>
                     <Grid container spacing={3}>
                         <Grid item xs={10} />
-                        <Grid item xs={2}>
+                        <Grid item xs={2} className={classes.alignRight}>
                             <IconButton
                                 aria-label="more"
                                 aria-controls="long-menu"
@@ -103,7 +110,6 @@ export const Layout = (props: Props) => {
                             </Menu>
                         </Grid>
                     </Grid>
-
                 </Toolbar>
             </AppBar>
             <Drawer

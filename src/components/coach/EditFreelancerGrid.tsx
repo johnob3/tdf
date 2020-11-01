@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, createStyles, Grid, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
-import { RequestBody } from './ViewFreelancerPage';
+import { RequestBody } from './FreelancerViewPage';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(4)
         },
         boldText: {
-            fontWeight: "bolder"
+            fontWeight: "bolder",
+            padding: theme.spacing(5)
         },
         regularText: {
 

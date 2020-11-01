@@ -1,5 +1,4 @@
 import React from 'react'
-import { VARIABLES } from "../config/variables"
 
 export function useFetch(endpoint: string) {
     const [data, setData] = React.useState<any>({});
@@ -16,7 +15,7 @@ export function useFetch(endpoint: string) {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const res = await fetch(VARIABLES.URL + endpoint, {
+                const res = await fetch(process.env.REACT_APP_API_URL + endpoint, {
                     headers: {
                         "Authorization": `Bearer ${idToken}`,
                         "content-type": "application/json"

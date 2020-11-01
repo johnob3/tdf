@@ -2,20 +2,18 @@
 import React from "react";
 import {
     Button,
-    colors,
     Container,
-    createMuiTheme,
     Grid,
     Link,
     makeStyles,
     TextField,
     Typography
 } from "@material-ui/core";
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import logo from "../assets/img/logo.png"
-import background from "../assets/img/login-bg.jpg"
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import { AuthContext } from "../utils/AuthContext";
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import background from "../assets/img/login-bg.jpg"
+import logo from "../assets/img/logo.png"
 
 export type AuthError = {
     code: string,
@@ -23,29 +21,11 @@ export type AuthError = {
     message: string
 } | null
 
-
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            main: "#007ac7"
-        },
-        secondary: {
-            main: "#E84C4C"
-        },
-        error: {
-            main: colors.red.A400
-        },
-        background: {
-            default: "#fff"
-        }
-    }
-});
-
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
     },
     cat: {
         position: "absolute",
@@ -59,14 +39,16 @@ const useStyles = makeStyles(() => ({
         padding: theme.spacing(0, 4, 4, 4)
     },
     form: {
-        padding: theme.spacing(5, 3, 3, 3),
+        padding: theme.spacing(5),
         backgroundColor: "#FFFFFF",
         width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(20)
+        minWidth: "504px",
+        marginTop: theme.spacing(20),
+        borderRadius: "16px",
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: "#0A7BC4",
         textTransform: "uppercase",
         lineHeight: "50px",
         borderRadius: "12px"
@@ -89,13 +71,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const LoginPage = () => {
-    // COACH
-    const [email, setEmail] = React.useState("ivan+no@tdf.dev")
-    const [password, setPassword] = React.useState("DufjrsuU")
-
     // FREELANCER
-    // const [email, setEmail] = React.useState("ivan+ad@tdf.dev")
-    // const [password, setPassword] = React.useState("XNdOz1ah")
+    const [email, setEmail] = React.useState("")
+    const [password, setPassword] = React.useState("")
 
 
     const [error, setError] = React.useState<AuthError>(null)
